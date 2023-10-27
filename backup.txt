@@ -1,0 +1,164 @@
+#include <time.h>
+#include <inttypes.h>
+#include <stdio.h>
+
+#include "lib/sparse.h"
+#include "lib/lib.h"
+
+#define SIZE 1000000
+#define MIN(a,b) (((a)<(b))?(a):(b))
+
+double vector[SIZE];
+double result[SIZE];
+double resultLast[SIZE];
+
+
+int main2()
+{
+    libInit();
+
+    uint32_t rows = SIZE;
+    uint32_t cols = SIZE;
+    double d = MIN(100.0/SIZE, 0.5);
+
+    Sparse* matrix;
+
+    printf("FUcking finally\n");
+
+    // printf("\nBenchmarking multiplication of matrix of dimensions %d x %d, d=%.5f\n", (int)SIZE, (int)SIZE, d);
+    
+    // matrix = createSparseMatrix(SIZE, SIZE, d);
+
+    // int key = tic();
+    // uint32_t row, col;
+    
+    // for(int i=0; i<1; i++)
+    // {
+    //     row = i*10;
+    //     col = i*100;
+    //     insertElement(matrix, row, col, (double)i+i);
+    // }
+
+    // toc("1 element inserted in", key);
+    // populateMatrix(matrix);
+    // populateVector(resultLast, SIZE);
+
+    // csrMatrixVectorMultiply(matrix, resultLast, result);
+
+    // for(int i=0; i<2; i++)
+    // {
+    //     uint32_t similars = 0;
+    //     float tol = 1/1e3;
+
+    //     for(uint32_t j=0; j<SIZE; j++)
+    //     {
+    //         if(abs(result[i] - resultLast[i]) < tol)
+    //         {
+    //             similars++;
+    //         }
+    //     }
+
+    //     printf("\n  Similars: %d\n", similars);
+    //     for(int i=0; i<SIZE; i++)
+    //     {
+    //         printf("%.2f\n", result[i]);
+    //     }
+        
+    //     memcpy(result, resultLast, SIZE);
+    //     csrMatrixVectorMultiply(matrix, resultLast, result);
+    // }
+    
+    // for(int i=0; i<SIZE; i++)
+    // {
+    //     printf("%.2f\n", result[i]);
+    // }
+
+    // // Free memory
+    // freeMatrix(matrix);
+
+    return 0;
+}
+
+
+
+
+
+
+#include <time.h>
+#include <inttypes.h>
+#include <stdio.h>
+
+#include "lib/sparse.h"
+#include "lib/lib.h"
+
+#define SIZE 10
+
+double vector[SIZE];
+double result[SIZE];
+double resultLast[SIZE];
+Sparse* matrix;
+
+
+int main2()
+{
+    libInit();
+
+    uint32_t rows = SIZE;
+    uint32_t cols = SIZE;
+    double d = 0.1;
+
+    matrix = createSparseMatrix(rows, cols, d);
+    populateMatrix(matrix);
+    populateVector(resultLast, SIZE);
+
+    csrMatrixVectorMultiply(matrix, resultLast, result);
+
+    for(int i=0; i<2; i++)
+    {
+        uint32_t similars = 0;
+        float tol = 1/1e3;
+
+        for(uint32_t j=0; j<SIZE; j++)
+        {
+            if(abs(result[i] - resultLast[i]) < tol)
+            {
+                similars++;
+            }
+        }
+
+        printf("\n  Similars: %d\n", similars);
+        for(int i=0; i<SIZE; i++)
+        {
+            printf("%.2f\n", result[i]);
+        }
+        
+        memcpy(result, resultLast, SIZE);
+        csrMatrixVectorMultiply(matrix, resultLast, result);
+    }
+    
+    for(int i=0; i<SIZE; i++)
+    {
+        printf("%.2f\n", result[i]);
+    }
+
+    // printMatrix(matrix);
+    
+
+    // printRawMatrix(matrix);
+    // printf("Measured output\n");
+    // printMatrix(matrix);
+    
+    // printf("\n\nDesired Output\n");
+    // printf("(0, 0)   1.0000\n");
+    // printf("(0, 3)   4.0000\n");
+    // printf("(1, 3)   3.0000\n");
+    // printf("(2, 0)   4.0000\n");
+    // printf("(2, 2)   4.0000\n");
+    // printf("(3, 1)   3.0000\n");
+    // printf("(4, 4)   2.0000\n");
+
+    // Free memory
+    freeMatrix(matrix);
+
+    return 0;
+}
