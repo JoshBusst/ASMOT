@@ -6,7 +6,7 @@
 
 
 typedef struct {
-    double d;
+    double d; // target density
     uint32_t rows; // number of rows
     uint32_t cols; // number of columns
     uint32_t nnz;  // number of non-zero elements

@@ -40,10 +40,10 @@ int main()
 
     uint32_t rows = SIZE;
     uint32_t cols = SIZE;
-    double d = 0.0001;
+    double d = 0.00001;
 
     // benchmarking paramters
-    double times[100];
+    // double times[100];
     int n = 100;
     int key, i;
 
@@ -60,11 +60,11 @@ int main()
         col = randint(0,cols-1);
         rand = randint(-1000, 1000)/10.0;
 
-        key = tic();
+        // key = tic();
         appendElement(matrix, row, col, rand);
-        times[i] = toc("NULL",key);
+        // times[i] = toc("NULL",key);
     }
-    printf("Average insertion time %.2fms", avg(times, n));
+    // printf("Average insertion time %.2fms", avg(times, n));
     
     // populateVector(operand, SIZE);
 

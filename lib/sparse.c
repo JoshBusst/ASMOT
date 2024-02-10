@@ -105,17 +105,12 @@ void appendElement(Sparse* matrix, int row, int col, double value) {
     matrix->col_idx[matrix->nnz] = col;
     matrix->nnz++;
 
-
     // don't need to increment succeeding row pointers. relies on future appendElement()
     // calls to set row pointers
-    for(uint32_t i=row + 1; i<matrix->rows; i++)
+    if(row + 1 < matrix->rows)
     {
-        matrix->row_ptr[i]++;
+        matrix->row_ptr[row + 1] = matrix->nnz;
     }
-    // if(row + 1 < matrix->rows)
-    // {
-    //     matrix->row_ptr[row + 1] = matrix->nnz;
-    // }
 }
 
 
@@ -182,7 +177,7 @@ void populateMatrix(Sparse* matrix)
         key = tic();
     }
 
-    // printf("Attempting to populate matrix with %d elements\n", nnz);
+    printf("Attempting to populate matrix with %d elements\n", nnz);
 
     for(uint32_t i=0; i<nnz; i++)
     {
@@ -200,7 +195,7 @@ void populateMatrix(Sparse* matrix)
 
         if(i % updateDelay == 0)
         {
-            // printf("%.2f%% populated...\n", (double)i*100 / (double)nnz);
+            printf("%.2f%% populated...\n", (double)i*100 / (double)nnz);
         }
 
         double value = (double)(rand())/100;
@@ -216,7 +211,7 @@ void populateMatrix(Sparse* matrix)
     }
     else
     {
-        // printf("Successfully populated %d/%d elements\n", valuesSet, nnz);
+        printf("Successfully populated %d/%d elements\n", valuesSet, nnz);
     }
 }
 
