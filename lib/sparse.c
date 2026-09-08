@@ -8,7 +8,6 @@
 #include <assert.h>
 #include "lib.h"
 
-#define TIMELOCAL 1
 
 
 // Function to create a sparse matrix in CSR format
@@ -16,22 +15,12 @@ Sparse* createSparseMatrix(int rows, int cols, double d) {
     assert((rows < 2e6) && (cols < 2e6));
     assert(d < 1);
 
-    int key;
-    if(TIMELOCAL)
-    {
-        printf("Generating matrix...\n");
+    uint64_t nnz = (uint64_t) (rows * cols * d);
 
-        // Start timing function
-        key = tic();
-    }
+    float matrix_memory = sizeof(Sparse) / 1e9;
+    Sparse* matrix = (Sparse*) malloc(matrix_memory);
 
-    uint64_t nnz = (uint64_t)(rows*(cols*d)); // Number of non-zero elements
-
-    float matrix_memory = sizeof(Sparse)/1e9;
-    Sparse* matrix = (Sparse*)malloc(matrix_memory);
-
-    if (matrix == NULL)
-    {
+    if (matrix == NULL) {
         char msg[60];
         sprintf(msg, "Unable to allocate %.2f Gb of memory to generate matrix", matrix_memory);
         perror(msg);
@@ -40,13 +29,13 @@ Sparse* createSparseMatrix(int rows, int cols, double d) {
 
     uint64_t memory = ((rows + nnz + 1) * sizeof(uint32_t) + nnz*sizeof(double));
 
-    if(memory > ULONG_MAX)
-    {
-        printf("Unable to populate matrix. Number of required bytes exceeds ULONG_MAX.\n");
-        printf("Parameters larger than ULONG_MAX lead to undefined malloc() behaviour.\n");
+    // if(memory > ULONG_MAX)
+    // {
+    //     printf("Unable to populate matrix. Number of required bytes exceeds ULONG_MAX.\n");
+    //     printf("Parameters larger than ULONG_MAX lead to undefined malloc() behaviour.\n");
         
-        return matrix;
-    }
+    //     return matrix;
+    // }
 
     matrix->d = d;
     matrix->rows = rows;
@@ -69,13 +58,6 @@ Sparse* createSparseMatrix(int rows, int cols, double d) {
         matrix->row_ptr[i] = 0;
     }
     
-    if(TIMELOCAL)
-    {
-        printf("Successfully allocated %.6lf Gb of memory to populate matrix.\n", (float)(memory/1e9));
-        // Stop timing function
-        toc("Matrix was generated in", key);
-    }
-
     return matrix;
 }
 

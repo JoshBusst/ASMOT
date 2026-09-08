@@ -2,10 +2,10 @@
 #include <inttypes.h>
 #include <stdio.h>
 
-#include "lib/sparse.h"
-#include "lib/lib.h"
+#include "lib.h"
+#include "sparse.h"
 
-#define SIZE 1000000
+#define SIZE 1000
 
 double result[SIZE];
 double operand[SIZE];
@@ -47,9 +47,12 @@ int main()
     int n = 100;
     int key, i;
 
+
+    printf("Successfully allocated %.6lf Gb of memory to populate matrix.\n", (float)(memory/1e9));
+    toc("Matrix was generated in", key);
+
     matrix = createSparseMatrix(rows, cols, d);
     populateMatrix(matrix);
-    return;
 
     uint32_t row, col;
     double rand;

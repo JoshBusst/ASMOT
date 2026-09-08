@@ -1,6 +1,6 @@
 #ifndef SPARSE_H
 #define SPARSE_H
-
+#define ULONG_MAX 12
 #include <inttypes.h>
 
 
