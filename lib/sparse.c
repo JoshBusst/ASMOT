@@ -11,14 +11,14 @@
 
 
 // Function to create a sparse matrix in CSR format
-Sparse* createSparseMatrix(int rows, int cols, double d) {
+Matrix* createSparseMatrix(int rows, int cols, double d) {
     assert((rows < 2e6) && (cols < 2e6));
     assert(d < 1);
 
     uint64_t nnz = (uint64_t) (rows * cols * d);
 
-    float matrix_memory = sizeof(Sparse) / 1e9;
-    Sparse* matrix = (Sparse*) malloc(matrix_memory);
+    float matrix_memory = sizeof(Matrix) / 1e9;
+    Matrix* matrix = (Matrix*) malloc(matrix_memory);
 
     if (matrix == NULL) {
         char msg[60];
@@ -64,7 +64,7 @@ Sparse* createSparseMatrix(int rows, int cols, double d) {
 
 
 // Unallocates memory held by a sparse matrix
-void freeMatrix(Sparse* matrix)
+void freeMatrix(Matrix* matrix)
 {
     printf("Freeing matrix...\n\n");
     free(matrix->row_ptr);
@@ -77,7 +77,7 @@ void freeMatrix(Sparse* matrix)
 
 // extremely damaging to the structure of the matrix. Use only when
 // generating matrices and not otherwise
-void appendElement(Sparse* matrix, int row, int col, double value) {
+void appendElement(Matrix* matrix, int row, int col, double value) {
     if (row < 0 || row >= matrix->rows || col < 0 || col >= matrix->cols) {
         fprintf(stderr, "Invalid row or column index\n");
         return;
@@ -98,7 +98,7 @@ void appendElement(Sparse* matrix, int row, int col, double value) {
 
 
 // Function to set a non-zero element in the matrix
-void insertElement(Sparse* matrix, int row, int col, double value) {
+void insertElement(Matrix* matrix, int row, int col, double value) {
     if (row < 0 || row >= matrix->rows || col < 0 || col >= matrix->cols)
     {
         fprintf(stderr, "Invalid row or column index\n");
@@ -132,7 +132,7 @@ void insertElement(Sparse* matrix, int row, int col, double value) {
 
 
 //This function populates an empty sparse matrix with up tp nnz elements
-void populateMatrix(Sparse* matrix)
+void populateMatrix(Matrix* matrix)
 {
     uint32_t nnz = matrix->rows*(matrix->cols*matrix->d);
     int step = (int)(2/matrix->d); // the 2 accounts for probability distriubtion
@@ -200,7 +200,7 @@ void populateMatrix(Sparse* matrix)
 
 
 // Function to print the raw properties of the matrix
-void printRawMatrix(Sparse* matrix)
+void printRawMatrix(Matrix* matrix)
 {
     printf("  Unformatted CSR matrix\n");
     printf("Rows: %d\n", matrix->rows);
@@ -235,7 +235,7 @@ void printRawMatrix(Sparse* matrix)
 
 
 // Iterates matrix elements and prints in ascending column format
-void printMatrix(Sparse* matrix)
+void printMatrix(Matrix* matrix)
 {
     printf("  Formatted CSR matrix\n");
 
@@ -271,7 +271,7 @@ void printMatrix(Sparse* matrix)
 
 
 
-void csrMatrixVectorMultiply(Sparse* matrix, double* vector, double* result)
+void csrMatrixVectorMultiply(Matrix* matrix, double* vector, double* result)
 {
     int key;
     if(TIMELOCAL)

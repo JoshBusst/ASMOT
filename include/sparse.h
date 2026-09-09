@@ -13,20 +13,25 @@ typedef struct {
     uint32_t *row_ptr; // row pointers
     uint32_t *col_idx; // column indices
     double *values; // list of non-zero values
-} Sparse;
+} Matrix;
+
+typedef struct {
+    struct Matrix base;
+    int csrout;
+} CSR;
 
 
 
 // Function prototypes
-Sparse* createSparseMatrix(int, int, double);
-void freeMatrix(Sparse*);
-void appendElement(Sparse*, int, int, double);
-void insertElement(Sparse*, int, int, double);
-void populateMatrix(Sparse*);
-void printRawMatrix(Sparse*);
-void printMatrix(Sparse*);
+Matrix* createSparseMatrix(int, int, double);
+void freeMatrix(Matrix*);
+void appendElement(Matrix*, int, int, double);
+void insertElement(Matrix*, int, int, double);
+void populateMatrix(Matrix*);
+void printRawMatrix(Matrix*);
+void printMatrix(Matrix*);
 void populateVector(double*, uint32_t);
-void csrMatrixVectorMultiply(Sparse*, double*, double*);
+void csrMatrixVectorMultiply(Matrix*, double*, double*);
 
 #endif // SPARSE_H
 
